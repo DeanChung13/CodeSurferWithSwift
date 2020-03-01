@@ -3,150 +3,285 @@ import {
   CodeSurferColumns,
   Step,
 } from "code-surfer";
-import { github, vsDark } from "@code-surfer/themes";
-
-export const theme = vsDark;
+import { github, nightOwl } from "@code-surfer/themes";
+import "prismjs/components/prism-swift"
+import { big } from "@mdx-deck/themes";
+export const theme = big;
 
 # Hello 👋
 
-You are using [MDX Deck](https://github.com/jxnblk/mdx-deck) and [Code Surfer](https://codesurfer.pomb.us)
+Try to use CodeSurfer with Swift!
 
 ---
 
-<CodeSurfer>
+<CodeSurfer theme={nightOwl}>
 
-```js title="This is a title" subtitle="and this a subtitle"
-function lorem(ipsum, dolor = 1) {
-  const sit = ipsum == null ? 0 : ipsum.sit;
-  dolor = sit - amet(dolor);
-  return sit
-    ? consectetur(ipsum, 0, dolor < 0 ? 0 : dolor)
-    : [];
+```swift
+class Car {
+  let name: String
+  let color: String
+
+  init(name: String, color: String) {
+    self.name = name
+    self.color = color
+  }
+
+  func printDetails() -> String {
+    return "I'm \(name) and my color is \(color)"
+  }
 }
 
-function incididunt(ipsum, ut = 1) {
-  ut = labore.et(amet(ut), 0);
-  const sit = ipsum == null ? 0 : ipsum.sit;
+class Logger {
+  var cars: [Car]
 
-  if (!sit || ut < 1) {
-    return [];
+  func printData() {
+    cars.forEach { car in
+      print(car.printDetails())
+    }
+  }
+}
+
+let logger = Logger(cars: [
+  Car(name: "Batmobile", color: "Black"),
+  Car(name: "SuperCar", color: "Gold"),
+  Car(name: "FamilyCar", color: "Grey")
+  ]
+)
+
+logger.printData()
+```
+
+```swift
+class Car {
+  let name: String
+  let color: String
+
+  init(name: String, color: String) {
+    self.name = name
+    self.color = color
   }
 
-  let dolore = 0;
-  let magna = 0;
-  const aliqua = new eiusmod(labore.ut(sit / ut));
+  func printDetails() -> String {
+    return "I'm \(name) and my color is \(color)"
+  }
+}
+ 
+class Bicycle {
+  let type: String
 
-  while (dolore < sit) {
-    aliqua[magna++] = consectetur(
-      ipsum,
-      dolore,
-      (dolore += ut)
-    );
+  init(type: String) {
+    self.type = type
   }
 
-  return aliqua;
+  func printDetails() -> String {
+    return "I'm a \(type)"
+  }
 }
 ```
 
-```js
-function lorem(ipsum, dolor = 1) {
-  const sit = ipsum == null ? 0 : ipsum.sit;
-  dolor = sit - amet(dolor);
-  return sit
-    ? consectetur(ipsum, 0, dolor < 0 ? 0 : dolor)
-    : [];
+```swift
+class Logger {
+  var cars: [Car]
+
+  func printData() {
+    cars.forEach { car in
+      print(car.printDetails())
+    }
+  }
 }
 
-function adipiscing(...elit) {
-  if (!elit.sit) {
-    return [];
-  }
+let logger = Logger(cars: [
+  Car(name: "Batmobile", color: "Black"),
+  Car(name: "SuperCar", color: "Gold"),
+  Car(name: "FamilyCar", color: "Grey")
+  ]
+)
 
-  const sed = elit[0];
-  return eiusmod.tempor(sed) ? sed : [sed];
+logger.printData()
+```
+
+```swift
+class Logger {
+  var cars: [Car]
+  var bicycles: [Bicycle]
+
+  func printData() {	// 每次新增一個類就需要修改printData，這樣就違反了OCP
+    cars.forEach { car in
+      print(car.printDetails())
+    }
+
+    bicycles.forEach { bicycles in
+      print(bicycles.printDetails())
+    }
+  }
 }
 
-function incididunt(ipsum, ut = 1) {
-  ut = labore.et(amet(ut), 0);
-  const sit = ipsum == null ? 0 : ipsum.sit;
+let logger = Logger(
+  cars: [ Car(name: "Batmobile", color: "Black"),
+          Car(name: "SuperCar", color: "Gold"),
+          Car(name: "FamilyCar", color: "Grey"),
+        ],
+  bicycles: [ Bicycle(type: "BMX"),
+              Bicycle(type: "Tandem") 
+        ]
+)
 
-  if (!sit || ut < 1) {
-    return [];
-  }
+logger.printData()
+```
 
-  let dolore = 0;
-  let magna = 0;
-  const aliqua = new eiusmod(labore.ut(sit / ut));
+```diff 5
+```
 
-  while (dolore < sit) {
-    aliqua[magna++] = consectetur(
-      ipsum,
-      dolore,
-      (dolore += ut)
-    );
-  }
-
-  return aliqua;
+```swift title="解決方法：將接口抽出來，「對擴展開放，對修改封閉」"
+protocol Printable {
+  func printDetails() -> String
 }
 ```
 
-```diff 1[10:14],2[15:19],3[22:27],10:12
+```swift
+class Logger {
+  var cars: [Printable]
 
+  func printData() {
+    cars.forEach { car in
+      print(car.printDetails())
+    }
+  }
+}
+
+let logger = Logger(
+  cars: [ Car(name: "Batmobile", color: "Black"),
+          Car(name: "SuperCar", color: "Gold"),
+          Car(name: "FamilyCar", color: "Grey"),
+          Bicycle(type: "BMX"),    
+          Bicycle(type: "Tandem") 
+        ]
+)
+
+logger.printData()
 ```
 
+```diff 2,12:17
+```
+
+```swift
+class Car {
+  let name: String
+  let color: String
+
+  init(name: String, color: String) {
+    self.name = name
+    self.color = color
+  }
+
+  func printDetails() -> String {
+    return "I'm \(name) and my color is \(color)"
+  }
+}
+ 
+class Bicycle {
+  let type: String
+
+  init(type: String) {
+    self.type = type
+  }
+
+  func printDetails() -> String {
+    return "I'm a \(type)"
+  }
+}
+```
+
+```swift
+class Car {
+  let name: String
+  let color: String
+
+  init(name: String, color: String) {
+    self.name = name
+    self.color = color
+  }
+}
+
+extension Car: Printable {
+  func printDetails() -> String {
+    return "I'm \(name) and my color is \(color)"
+  }
+}
+ 
+class Bicycle {
+  let type: String
+
+  init(type: String) {
+    self.type = type
+  }
+}
+
+extension Bicycle: Printable {
+  func printDetails() -> String {
+    return "I'm a \(type)"
+  }
+}
+```
+
+```diff 1:15
+```
+
+```diff 17:29
+```
+
+
+```swift
+class Car {
+  let name: String
+  let color: String
+
+  init(name: String, color: String) {
+    self.name = name
+    self.color = color
+  }
+}
+
+extension Car: CustomStringConvertible {
+  var description: String {
+    "I'm \(name) and my color is \(color)"
+  }
+}
+ 
+class Bicycle {
+  let type: String
+
+  init(type: String) {
+    self.type = type
+  }
+}
+
+extension Bicycle: CustomStringConvertible {
+  var description: String {
+    "I'm a \(type)"
+  }
+}
+```
+```swift
+class Logger {
+  var cars: [CustomStringConvertible]
+
+  func printData() {
+    cars.forEach { car in
+      print(car)
+    }
+  }
+}
+
+let logger = Logger(
+  cars: [ Car(name: "Batmobile", color: "Black"),
+          Car(name: "SuperCar", color: "Gold"),
+          Car(name: "FamilyCar", color: "Grey"),
+          Bicycle(type: "BMX"),    
+          Bicycle(type: "Tandem") 
+        ]
+)
+
+logger.printData()
+```
 </CodeSurfer>
-
----
-
-<CodeSurferColumns themes={[vsDark, github]}>
-
-<Step>
-
-```js
-const magna = aliqua => aliqua.ut((enim, ad) => enim, 0);
-```
-
-```js
-const minim = (ad, enim) => dolore.magna(ad / enim);
-```
-
-</Step>
-
-<Step>
-
-```js
-const lorem = (ipsum, dolor, sit) => {
-  const amet = dolor - ipsum;
-  return consectetur.adipiscing(
-    {
-      elit: sed.eiusmod(sit - dolor) / amet + 2,
-    },
-    (tempor, incididunt) => ipsum + amet * incididunt
-  );
-};
-
-const magna = aliqua => aliqua.ut((enim, ad) => enim, 0);
-```
-
-```js
-const minim = (ad, enim) => dolore.magna(ad / enim);
-
-const sed = (eiusmod, tempor, incididunt) => {
-  const ut = tempor - eiusmod;
-  return labore.et(
-    {
-      amet: dolore.magna(incididunt - tempor) / ut + 2,
-    },
-    (aliqua, elit) => eiusmod + ut * elit
-  );
-};
-```
-
-</Step>
-
-</CodeSurferColumns>
-
----
-
-docs:  
-[codesurfer.pomb.us](https://codesurfer.pomb.us)
