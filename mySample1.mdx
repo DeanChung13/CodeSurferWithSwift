@@ -1,0 +1,100 @@
+import { CodeSurfer } from "code-surfer"
+import { nightOwl } from "@code-surfer/themes"
+
+<CodeSurfer theme={nightOwl}>
+
+```js subtitle="簡化問題 - 實作 isPrime" showNumbers
+for (let i=0; i<n; i++) {
+  if (isPrime(arr[i])) {
+    console.log("Prime")
+  } else {
+    console.log("Composite")
+  }
+}
+
+function isPrime(n) {
+  // TODO
+}
+```
+
+```js subtitle="實作判斷質數邏輯"
+for (let i=0; i<n; i++) {
+  if (isPrime(arr[i])) {
+    console.log("Prime")
+  } else {
+    console.log("Composite")
+  }
+}
+
+function isPrime(n) {
+  if (n === 1) return false
+  for (let i=2; i<n; i++) {
+    if (n % i === 0) {
+      return false
+    }
+  }
+  return true
+}
+```
+
+```js 1:7 subtitle="第一部分：主要邏輯"
+for (let i=0; i<n; i++) {
+  if (isPrime(arr[i])) {
+    console.log("Prime")
+  } else {
+    console.log("Composite")
+  }
+}
+
+function isPrime(n) {
+  if (n === 1) return false
+  for (let i=2; i<n; i++) {
+    if (n % i === 0) {
+      return false
+    }
+  }
+  return true
+}
+```
+
+```js 9:17 subtitle="第二部分：輔助函式"
+for (let i=0; i<n; i++) {
+  if (isPrime(arr[i])) {
+    console.log("Prime")
+  } else {
+    console.log("Composite")
+  }
+}
+
+function isPrime(n) {
+  if (n === 1) return false
+  for (let i=2; i<n; i++) {
+    if (n % i === 0) {
+      return false
+    }
+  }
+  return true
+}
+```
+
+```js subtitle="打完收工"
+for (let i=0; i<n; i++) {
+  if (isPrime(arr[i])) {
+    console.log("Prime")
+  } else {
+    console.log("Composite")
+  }
+}
+
+function isPrime(n) {
+  if (n === 1) return false
+  for (let i=2; i<n; i++) {
+    if (n % i === 0) {
+      return false
+    }
+  }
+  return true
+}
+```
+
+</CodeSurfer>
